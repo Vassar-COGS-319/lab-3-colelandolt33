@@ -10,12 +10,25 @@
 # criterion is the threshold for a response (default value is 3)
 
 random.walk.model <- function(samples, drift=0, sdrw=0.3, criterion=3){
-  
+  accuracy <- logical()
+  rt <- rep(0, samples)
+  for(i in 1:samples) {
+    evidence <- 0
+    while(abs(evidence)<criterion){
+      trial <- rnorm(1, drift, sdrw)
+      evidence <- evidence + trial
+      rt[i] <- rt[i] + 1
+    }
+    if(evidence>criteron) {
+      accuracy[i] <- TRUE
+    } else {
+      accuracy[i] <- FALSE
+    }
+  }
   output <- data.frame(
-    correct = accuracy.array,
-    rt = rt.array
+    correct = accuracy,
+    rt = rt
   )
-  
   return(output)
 }
 
